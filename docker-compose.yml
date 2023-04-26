@@ -8,16 +8,16 @@ networks:
 services:
   wordpress:
     container_name: "${COMPOSE_PROJECT_NAME}-wordpress"
-    image: "wordpress:php${PHP_VERSION}"
-    restart: "${WORDPRESS_RESTART}"
+    image: "wordpress:php${PHP_VERSION:-8.2}"
+    restart: "${WORDPRESS_RESTART:-no}"
     volumes:
-      - ${WORDPRESS_PATH}:/var/www/html
+      - ${WORDPRESS_PATH:-./public_html}:/var/www/html
     # Using traefik
     labels:
       - traefik.enable=true
       - traefik.docker.network=proxy
-      - traefik.http.routers.${COMPOSE_PROJECT_NAME}-wordpress.entrypoints=${WORDPRESS_ENTRYPOINTS}
-      - traefik.http.routers.${COMPOSE_PROJECT_NAME}-wordpress.rule=Host(${WORDPRESS_DOMAINS})
+      - traefik.http.routers.${COMPOSE_PROJECT_NAME}-wordpress.entrypoints=${WORDPRESS_ENTRYPOINTS:-web}
+      - traefik.http.routers.${COMPOSE_PROJECT_NAME}-wordpress.rule=Host(${WORDPRESS_DOMAINS:-`wordpress.localhost`})
     networks:
       - proxy
     expose:
