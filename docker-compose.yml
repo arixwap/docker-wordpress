@@ -12,6 +12,7 @@ services:
     restart: "${WORDPRESS_RESTART:-no}"
     volumes:
       - ${WORDPRESS_PATH:-./public_html}:/var/www/html
+      - ./php.ini:/usr/local/etc/php/conf.d/php.ini
     # Using traefik
     labels:
       - traefik.enable=true
